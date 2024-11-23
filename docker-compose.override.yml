@@ -21,7 +21,7 @@
 
 # ---------------------------------------------------
 
-# services:
+ services:
 
 # # USE LIBRECHAT CONFIG FILE
 #   api:
@@ -31,11 +31,11 @@
 #       target: /app/librechat.yaml
 
 # # LOCAL BUILD
-#   api:
-#     image: librechat
-#     build:
-#       context: .
-#       target: node
+   api:
+     image: librechat
+     build:
+       context: .
+       target: node
 
 # # BUILD FROM LATEST IMAGE
 #   api:
