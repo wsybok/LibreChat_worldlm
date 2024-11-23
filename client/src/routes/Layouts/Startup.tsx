@@ -6,7 +6,7 @@ import AuthLayout from '~/components/Auth/AuthLayout';
 import { useLocalize } from '~/hooks';
 
 const headerMap = {
-  '/login': 'com_auth_welcome_back',
+  '/login': 'Welcome to Modified LibreChat', // 修改登录页面标题
   '/register': 'com_auth_create_account',
   '/forgot-password': 'com_auth_reset_password',
   '/reset-password': 'com_auth_reset_password',
