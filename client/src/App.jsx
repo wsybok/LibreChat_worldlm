@@ -17,37 +17,34 @@ const App = () => {
   const queryClient = new QueryClient({
     queryCache: new QueryCache({
       onError: (error) => {
-        if (error?.response?.status === 401) {
-          setError(error);
-        }
+        setError(error);
       },
     }),
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <LiveAnnouncer>
+    <RecoilRoot>
+      <DndProvider backend={HTML5Backend}>
+        <QueryClientProvider client={queryClient}>
           <ThemeProvider>
-            <RadixToast.Provider>
+            <ScreenshotProvider>
               <ToastProvider>
-                <DndProvider backend={HTML5Backend}>
-                  <RouterProvider router={router} />
-                  <ReactQueryDevtools initialIsOpen={false} position="top-right" />
-                  <Toast />
-                  <RadixToast.Viewport className="pointer-events-none fixed inset-0 z-[1000] mx-auto my-2 flex max-w-[560px] flex-col items-stretch justify-start md:pb-5" />
-                </DndProvider>
+                <RadixToast.Provider>
+                  <LiveAnnouncer>
+                    <RouterProvider router={router} />
+                    <Toast />
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    {/* 添加的测试元素 */}
+                    <h1>Welcome to My Modified LibreChat!</h1>
+                  </LiveAnnouncer>
+                </RadixToast.Provider>
               </ToastProvider>
-            </RadixToast.Provider>
+            </ScreenshotProvider>
           </ThemeProvider>
-        </LiveAnnouncer>
-      </RecoilRoot>
-    </QueryClientProvider>
+        </QueryClientProvider>
+      </DndProvider>
+    </RecoilRoot>
   );
 };
 
-export default () => (
-  <ScreenshotProvider>
-    <App />
-  </ScreenshotProvider>
-);
+export default App;
