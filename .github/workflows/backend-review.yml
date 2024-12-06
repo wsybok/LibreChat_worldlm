@@ -39,7 +39,7 @@ jobs:
       - name: Create empty auth.json file
         run: |
           mkdir -p api/data
-          echo '{}' > api/data/auth.json
+          echo '{}' > config/auth.json
 
       - name: Check for Circular dependency in rollup
         working-directory: ./packages/data-provider
