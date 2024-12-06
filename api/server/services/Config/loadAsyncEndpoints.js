@@ -14,7 +14,7 @@ async function loadAsyncEndpoints(req) {
   let i = 0;
   let serviceKey, googleUserProvides;
   try {
-    serviceKey = require('~/data/auth.json');
+    serviceKey = require('~/config/auth.json');
   } catch (e) {
     if (i === 0) {
       i++;
