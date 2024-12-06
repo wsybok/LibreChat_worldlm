@@ -36,6 +36,11 @@
      build:
        context: .
        target: node
+     volumes:
+     - type: bind
+       source: ./config/auth.json
+       target: /app/config/auth.json
+
 
 # # BUILD FROM LATEST IMAGE
 #   api:
