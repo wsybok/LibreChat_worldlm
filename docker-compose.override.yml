@@ -36,12 +36,6 @@
      build:
        context: .
        target: node
-     volumes:
-     - type: bind
-       source: ./config/auth.json
-       target: ./config/auth.json
-
-
 # # BUILD FROM LATEST IMAGE
 #   api:
 #     image: ghcr.io/danny-avila/librechat-dev:latest
