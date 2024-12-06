@@ -11,6 +11,6 @@ module.exports = {
   ],
   moduleNameMapper: {
     '~/(.*)': '<rootDir>/$1',
-    '~/data/auth.json': '<rootDir>/__mocks__/auth.mock.json',
+    '~/config/auth.json': '<rootDir>/__mocks__/auth.mock.json',
   },
 };
