@@ -15,7 +15,7 @@ const initializeClient = async ({ req, res, endpointOption }) => {
 
   let serviceKey = {};
   try {
-    serviceKey = require('~/data/auth.json');
+    serviceKey = require('~/config/auth.json');
   } catch (e) {
     // Do nothing
   }
