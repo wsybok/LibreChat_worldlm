@@ -4,6 +4,7 @@ const { ChatVertexAI } = require('@langchain/google-vertexai');
 const { GoogleVertexAI } = require('@langchain/google-vertexai');
 const { ChatGoogleVertexAI } = require('@langchain/google-vertexai');
 const { ChatGoogleGenerativeAI } = require('@langchain/google-genai');
+const { spendTokens } = require('~/models/spendTokens');
 const { GoogleGenerativeAI: GenAI } = require('@google/generative-ai');
 const { AIMessage, HumanMessage, SystemMessage } = require('@langchain/core/messages');
 const { encoding_for_model: encodingForModel, get_encoding: getEncoding } = require('tiktoken');
@@ -301,6 +302,50 @@ class GoogleClient extends BaseClient {
     message.image_urls = image_urls.length ? image_urls : undefined;
     return files;
   }
+
+
+
+/**
+ * Records token usage for billing/tracking purposes.
+ * @param {object} params 
+ * @param {number} params.promptTokens
+ * @param {number} params.completionTokens 
+ * @param {Object} [params.usage]
+ * @param {string} [params.model]
+ * @param {string} [params.context='message']
+ * @returns {Promise<void>}
+ */
+async recordTokenUsage({ promptTokens, completionTokens, usage, context = 'message' }) {
+  await spendTokens(
+    {
+      context,
+      model: this.modelOptions.model,
+      conversationId: this.conversationId,
+      user: this.user ?? this.options.req.user?.id,
+      endpointTokenConfig: this.options.endpointTokenConfig,
+    },
+    { promptTokens, completionTokens },
+  );
+
+  // Handle reasoning tokens if present in usage data
+  if (
+    usage &&
+    typeof usage === 'object' &&
+    'reasoning_tokens' in usage &&
+    typeof usage.reasoning_tokens === 'number'
+  ) {
+    await spendTokens(
+      {
+        context: 'reasoning',
+        model: this.modelOptions.model,
+        conversationId: this.conversationId,
+        user: this.user ?? this.options.req.user?.id,
+        endpointTokenConfig: this.options.endpointTokenConfig,
+      },
+      { completionTokens: usage.reasoning_tokens },
+    );
+  }
+}
 
   /**
    * Builds the augmented prompt for attachments
