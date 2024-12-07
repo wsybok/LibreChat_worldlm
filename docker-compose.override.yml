@@ -45,8 +45,8 @@
 #     image: ghcr.io/danny-avila/librechat:latest
 
 # # BUILD FROM LATEST API IMAGE
-#   api:
-#     image: ghcr.io/danny-avila/librechat-dev-api:latest
+   api:
+     image: ghcr.io/danny-avila/librechat-dev-api:latest
 
 # # BUILD FROM LATEST API IMAGE (NUMBERED RELEASE)
 #   api:
