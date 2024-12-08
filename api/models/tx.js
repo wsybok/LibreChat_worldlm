@@ -110,7 +110,9 @@ const getValueKey = (model, endpoint) => {
   if (!modelName) {
     return undefined;
   }
-
+  if (modelName.startsWith('gemini')) {
+    return modelName;
+  }
   if (modelName.includes('gpt-3.5-turbo-16k')) {
     return '16k';
   } else if (modelName.includes('gpt-3.5-turbo-0125')) {
