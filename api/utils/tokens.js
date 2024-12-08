@@ -261,21 +261,6 @@ function matchModelName(modelName, endpoint = EModelEndpoint.openAI) {
     return undefined;
   }
 
-  modelName = modelName.toLowerCase();
-
-  if (modelName.includes('gemini')) {
-    if (modelName.includes('1.5')) {
-      return 'gemini-1.5';
-    } else if (modelName.includes('1.0-pro-vision-001')) {
-      return 'gemini-1.0-pro-vision-001';
-    } else if (modelName.includes('1.0-pro')) {
-      return 'gemini-1.0-pro';
-    } else {
-      return 'gemini';
-    }
-  }
-
-
   const tokensMap = maxTokensMap[endpoint];
   if (!tokensMap) {
     return modelName;
