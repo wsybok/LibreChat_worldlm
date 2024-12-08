@@ -791,40 +791,6 @@ class OpenAIClient extends BaseClient {
 ||>Response:
 "${JSON.stringify(truncateText(responseText))}"`;
 
-    const isGeminiModel = this.modelOptions.model.toLowerCase().includes('gemini');
-    if (isGeminiModel) {
-      try {
-        const modelOptions = {
-          model: this.modelOptions.model,
-          temperature: 0.2,
-          max_tokens: 16,
-        };
-        // Gemini特定的请求格式
-        const messages = [{
-          role: 'user',
-          parts: [{
-            text: `Please generate a concise title (5 words or less) for this conversation:\n${convo}`
-          }]
-        }];
-
-        const response = await this.sendCompletion(
-          messages,
-          {
-            modelOptions,
-            onProgress: null,
-            abortController: this.abortController
-          }
-        );
-        title = response.trim();
-        return title;
-      } catch (e) {
-        logger.error('[OpenAIClient] Gemini title generation failed:', e);
-        return 'New Chat';
-      }
-    }
-  
-
-
     const { OPENAI_TITLE_MODEL } = process.env ?? {};
 
     let model = this.options.titleModel ?? OPENAI_TITLE_MODEL ?? 'gpt-4o-mini';
