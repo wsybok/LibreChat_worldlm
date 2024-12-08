@@ -993,7 +993,7 @@ async recordTokenUsage({ promptTokens, completionTokens, usage, context = 'messa
 
   getTokenCount(text) {
     if (!text) {
-      return 0;
+      return 1;
     }
     
     if (this.isGenerativeModel) {
