@@ -63,6 +63,10 @@ class GoogleClient extends BaseClient {
       return;
     }
     this.setOptions(options);
+
+    this.lastPromptText = '';
+    this.lastResponseText = '';
+
   }
 
   /* Google specific methods */
@@ -663,6 +667,18 @@ async recordTokenUsage({ promptTokens, completionTokens, usage, context = 'messa
   }
 
   async getCompletion(_payload, options = {}) {
+
+    if (this.isGenerativeModel) {
+      if (_payload.contents) {
+        this.lastPromptText = _payload.contents.map(m => 
+          m.parts.map(p => p.text).join(' ')
+        ).join('\n');
+      } else if (typeof _payload === 'string') {
+        this.lastPromptText = _payload;
+      }
+    }
+  
+
     const { parameters, instances } = _payload;
     const { onProgress, abortController } = options;
     const streamRate = this.options.streamRate ?? Constants.DEFAULT_STREAM_RATE;
@@ -776,7 +792,18 @@ async recordTokenUsage({ promptTokens, completionTokens, usage, context = 'messa
       });
       reply += chunkText;
     }
-
+    this.lastResponseText = reply;
+    if (this.isGenerativeModel) {
+      const promptTokens = this.getTokenCount(this.lastPromptText);
+      const completionTokens = this.getTokenCount(reply);
+      
+      await this.recordTokenUsage({
+        promptTokens,
+        completionTokens,
+        context: 'message'
+      });
+    }
+  
     return reply;
   }
 
@@ -965,8 +992,19 @@ async recordTokenUsage({ promptTokens, completionTokens, usage, context = 'messa
   }
 
   getTokenCount(text) {
+    if (!text) {
+      return 0;
+    }
+    
+    if (this.isGenerativeModel) {
+      // Gemini模型使用近似计算
+      // 英文单词约1.3 tokens，中文字符约2 tokens
+      const wordCount = text.match(/[\u4e00-\u9fa5]|[a-zA-Z]+|\S/g)?.length || 0;
+      return Math.ceil(wordCount * 1.3);
+    }
+    
     return this.gptEncoder.encode(text, 'all').length;
-  }
+    }
 }
 
 module.exports = GoogleClient;
